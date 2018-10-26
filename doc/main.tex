@@ -1,0 +1,87 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc} % unicode latex
+\usepackage[margin=2.5cm]{geometry} % The margin of the page
+\usepackage{graphicx} % to include pictures
+\usepackage[hidelinks]{hyperref} % To include hyperlinks in a PDF
+\usepackage{fancyhdr} % to be able to make the page fancy looking
+\usepackage{lastpage} % so latex knows what is the last page...
+\usepackage{appendix} % To make appendixes
+\usepackage{listings} % This is needed to insert Python or other code
+\usepackage{color} % For text colors
+\usepackage{palatino}
+
+% Wikibooks page on lstlisting
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily,
+  aboveskip={1.0\baselineskip},
+  belowskip={1.0\baselineskip},
+  columns=fixed,
+  extendedchars=true,
+  breaklines=true,
+  tabsize=4,
+  prebreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\hookleftarrow}},
+  frame=lines,
+  showtabs=false,
+  showspaces=false,
+  showstringspaces=false,
+  keywordstyle=\color[rgb]{0.627,0.126,0.941},
+  commentstyle=\color[RGB]{63,168,74},
+  stringstyle=\color[rgb]{01,0,0},
+  numbers=left,
+  numberstyle=\small,
+  stepnumber=1,
+  numbersep=10pt,
+  captionpos=t,
+  escapeinside={\%*}{*)}
+}
+
+\title{Scheduleee}
+\author{the authors}
+
+%% Fancy layout
+\pagestyle{fancy}
+\lhead{EDF vs LLF}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage\ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+
+%%% --- %%% --- DOCUMENT START --- %%% --- %%%
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+%%% Counting pages now %%%
+\pagestyle{fancy}
+\setcounter{page}{1}
+
+
+\section{Introduction}
+
+The goal of this assignment...
+
+\section{Implementation choices}
+
+\section{Difficulties met and solutions}
+
+\section{Graphical solution}
+
+\section{EDF vs LLF comparison}
+
+\section{Conclusion}
+
+Use multicore processors
+
+\end{document}
