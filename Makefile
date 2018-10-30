@@ -17,3 +17,6 @@ watch_tex:
 	cd ${DOC_DIR} && latexmk -pdf -pvc
 
 report: ${REPORT}.pdf clean_aux
+
+run:
+	pipenv run python ${SRC_DIR}/project.py
