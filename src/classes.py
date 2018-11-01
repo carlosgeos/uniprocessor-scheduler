@@ -13,3 +13,6 @@ class Job:
         self.time_to_deadline = task.period
         self.name = "T" + str(task.index) + "J" + str(task.job_counter)
         task.job_counter += 1
+
+    def __str__(self):
+        return self.name

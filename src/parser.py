@@ -6,4 +6,4 @@ def parse_system(input_file):
     reader = csv.DictReader(open(input_file),
                             fieldnames=['offset', 'period', 'wcet'],
                             delimiter=';')
-    return [Task(row['offset'], row['wcet'], row['period'], i) for i, row in enumerate(reader)]
+    return [Task(int(row['offset']), int(row['wcet']), int(row['period']), i) for i, row in enumerate(reader)]

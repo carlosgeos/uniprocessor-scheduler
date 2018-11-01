@@ -1,4 +1,4 @@
-
+from classes import Job
 
 def simulate(scheduler, tasks, start, stop):
     jobs = []
@@ -18,13 +18,15 @@ def simulate(scheduler, tasks, start, stop):
             job.time_to_deadline -= 1
             if job.time_to_deadline <= 0 and job.remaining_execution_time > 0:
                 deadline_misses.append(job)
+                # Abort the job at its deadline, according to statement
+                jobs.remove(job)
         deadline_misses.sort(key = lambda job : job.task.index)
 
         # Add a new job if it's realase time for a task
         for task in tasks:
             if t - task.offset % task.period == 0:
                 new_job = Job(task)
-                job_arrivals.append(task)
+                job_arrivals.append(new_job)
                 jobs.append(new_job)
         job_arrivals.sort(key = lambda job : job.task.index)
 
@@ -40,9 +42,13 @@ def simulate(scheduler, tasks, start, stop):
 
         # Print the log
         for deadline_miss in deadline_misses:
-            print(t, ": Job ", deadline_miss + " misses a deadline", sep="")
+            print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
         for job_arrival in job_arrivals:
             print(t, ": Arrival of job ", job_arrival, sep="")
         # TODO: print the whole scheduled execution at once rather than
         # one line per time unit
         print(t, "-", t + 1, ": ", current, sep="")
+
+class EdfScheduler:
+    def sort_jobs(self, jobs):
+        jobs.sort(key = lambda job: job.time_to_deadline)
