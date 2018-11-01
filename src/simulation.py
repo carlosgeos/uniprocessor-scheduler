@@ -55,4 +55,4 @@ def simulate(scheduler, tasks, start, stop):
 
 class EdfScheduler:
     def sort_jobs(self, jobs):
-        jobs.sort(key = lambda job: job.time_to_deadline)
+        jobs.sort(key = lambda job: (job.time_to_deadline, job.task.index))
