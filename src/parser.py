@@ -1,6 +1,7 @@
 import csv
 from classes import Task
 
+
 def parse_system(input_file):
     """Given a properly formatted input file, it returns a list of tasks."""
     reader = csv.DictReader(open(input_file),
