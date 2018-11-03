@@ -1,6 +1,6 @@
 import os
 
-from parser import parse_system
+from parser_ import parse_system
 from argparser import argparser
 from simulation import EdfScheduler, simulate
 

@@ -27,4 +27,8 @@ gen_parser.add_argument('output_file', default='tasks.txt', type=str,
                         help='Path where output file should be written')
 gen_parser.set_defaults(func=generate_tasks) # dispatcher
 
+interval_parser.add_argument("input_file",default="./data/system.txt",type=str,
+                            help="Path where input file is")
+interval_parser.set_defaults(func=no_arguments)
+
 # TODO, add command line options for the rest of the sub_commands
