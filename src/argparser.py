@@ -1,6 +1,7 @@
 import argparse
 from generator import generate_tasks
 from feasibility_interval import getFeasibilityInterval
+from simulation import simulate_edf
 
 
 def no_arguments(args):
@@ -30,6 +31,22 @@ gen_parser.set_defaults(func=generate_tasks) # dispatcher
 
 interval_parser.add_argument("input_file", default="./data/system.txt", type=str,
                             help="Path where input file is")
+interval_parser.set_defaults(func=getFeasibilityInterval)
+
+edf_parser.add_argument("input_file", default="./data/system.txt", type=str,
+                            help="Path where input file is")
+edf_parser.add_argument('start', default=0, type=int,
+                        help='start time')
+edf_parser.add_argument('stop', default=20, type=int,
+                        help='stop time')
+edf_parser.set_defaults(func=simulate_edf)
+
+llf_parser.add_argument("input_file", default="./data/system.txt", type=str,
+                            help="Path where input file is")
+llf_parser.add_argument('start', default=0, type=int,
+                        help='start time')
+llf_parser.add_argument('stop', default=20, type=int,
+                        help='stop time')
 interval_parser.set_defaults(func=getFeasibilityInterval)
 
 # TODO, add command line options for the rest of the sub_commands

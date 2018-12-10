@@ -1,4 +1,12 @@
 from classes import Job
+from parser_ import parse_system
+
+
+def simulate_edf(args):
+    params = vars(args)
+    tasks = parse_system(params["input_file"])
+    scheduler = EdfScheduler()
+    simulate(scheduler, tasks, params["start"], params["stop"])
 
 def simulate(scheduler, tasks, start, stop):
     jobs = []
@@ -56,3 +64,5 @@ def simulate(scheduler, tasks, start, stop):
 class EdfScheduler:
     def sort_jobs(self, jobs):
         jobs.sort(key = lambda job: (job.time_to_deadline, job.task.index))
+        
+
