@@ -1,7 +1,8 @@
 from math import gcd
 from functools import reduce
 import parser_
-def calcLCM(a,b):
+
+def lcm(a,b):
     return a*b//gcd(a,b)
 
 
@@ -11,6 +12,6 @@ def getFeasibilityInterval(args):
     periods = [t.period for t in tasks]
     o_max = max(t.offset for t in tasks)
 
-    interval=reduce(calcLCM,periods)*2+o_max
+    interval=reduce(lcm,periods)*2+o_max
     print(0,interval,sep=",")
 

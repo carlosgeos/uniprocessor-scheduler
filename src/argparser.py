@@ -22,7 +22,7 @@ llf_parser = subparsers.add_parser('llf')
 
 gen_parser.add_argument('tasks', default=6, type=int,
                         help='Number of tasks to generate')
-gen_parser.add_argument('load_factor', default=70, type=int,
+gen_parser.add_argument('load_factor', default=70, type=str,
                         help='Utilization factor of the system')
 gen_parser.add_argument('output_file', default='tasks.txt', type=str,
                         help='Path where output file should be written')
