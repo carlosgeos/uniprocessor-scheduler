@@ -370,3 +370,5 @@ TSWLatexianTemp*
 *.sta
 
 *.pdf
+
+.idea*
