@@ -5,16 +5,12 @@ def calcLCM(a,b):
     return a*b//gcd(a,b)
 
 
-def getFeasibilityInterval():
-    tasks=parser_.parse_system("./data/system.txt")
-    periods=[]
-    o_max=0
-    for task in tasks:
-        periods.append(task.period)
-        if task.offset>o_max:
-            o_max=task.offset
+def getFeasibilityInterval(args):
+    params = vars(args)
+    tasks=parser_.parse_system(params["input_file"])
+    periods = [t.period for t in tasks]
+    o_max = max(t.offset for t in tasks)
 
     interval=reduce(calcLCM,periods)*2+o_max
-    print(0,",",interval)
+    print(0,interval,sep=",")
 
-getFeasibilityInterval()
