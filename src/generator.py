@@ -2,6 +2,7 @@ from classes import Task
 from fractions import Fraction
 from feasibility_interval import lcm
 from parser_ import save_system
+from random import randint
 
 def deviate_load(elem, coll):
     """Randomize average load for each of the tasks
@@ -28,5 +29,5 @@ def generate_tasks(args):
     # the smallest quotients we can use that divide time equally
     wcet = load_by_process.numerator
     period = load_by_process.denominator
-    tasks = [Task(0, wcet, period, i) for i in range(n_tasks)]
+    tasks = [Task(randint(0, period // 2), wcet, period, i) for i in range(n_tasks)]
     save_system(tasks, params["output_file"])
