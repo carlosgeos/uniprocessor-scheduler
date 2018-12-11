@@ -69,7 +69,7 @@ def simulate(scheduler, tasks, start, stop):
             print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
         for job_arrival in job_arrivals:
             print(t, ": Arrival of job ", job_arrival, sep="")
-
+    print("END: {0} preemptions".format(preemption_count))
     visualizeSimulation(executions, stop, len(tasks), scheduler.name())
 
 class EdfScheduler:
