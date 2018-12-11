@@ -23,8 +23,10 @@ def simulate(scheduler, tasks, start, stop):
     # The time since the current job has been lastly started
     # It is used only for printing
     uptime_current = 0
-    executions=[]
-    for t in range(start, stop):
+    # Lists tracing execution events for plotting
+    executions = []
+    releases = []
+    for t in range(stop + 1):
         deadline_misses = []
         job_arrivals = []
 
@@ -49,6 +51,8 @@ def simulate(scheduler, tasks, start, stop):
                 new_job = Job(task)
                 job_arrivals.append(new_job)
                 jobs.append(new_job)
+                if t >= start:
+                    releases.append((t, new_job.task.index))
         job_arrivals.sort(key = lambda job : job.task.index)
 
         # Sort the jobs by priority
@@ -57,24 +61,26 @@ def simulate(scheduler, tasks, start, stop):
         scheduled = jobs[0] if len(jobs) > 0 else None
         # If the scheduled job is a different one
         if scheduled != current and current != None:
-            print(t - uptime_current, "-", t, ": ", current)
-            executions.append([(t - uptime_current, current.task.index), (t, current.task.index)])
+            if t - uptime_current >= start:
+                print(t - uptime_current, "-", t, ": ", current)
+                executions.append([(t - uptime_current, current.task.index), (t, current.task.index)])
+                # If we do a preemption, increment the counter
+                if current.remaining_execution_time > 0 and current not in deadline_misses:
+                    preemption_count += 1
             uptime_current = 0
-            # If we do a preemption, increment the counter
-            if current.remaining_execution_time > 0:
-                preemption_count += 1
 
         # Schedule the job
         current = scheduled
 
-        # Print the log
-        for deadline_miss in deadline_misses:
-            print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
-        for job_arrival in job_arrivals:
-            print(t, ": Arrival of job ", job_arrival, sep="")
+        if t >= start:
+            # Print the log
+            for deadline_miss in deadline_misses:
+                print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
+            for job_arrival in job_arrivals:
+                print(t, ": Arrival of job ", job_arrival, sep="")
 
     print("END: {0} preemptions".format(preemption_count))
-    visualizeSimulation(executions, stop, len(tasks), scheduler.name())
+    visualizeSimulation(executions, releases, start, stop, len(tasks), scheduler.name())
 
 class EdfScheduler:
     def name(self):
@@ -90,16 +96,24 @@ class LlfScheduler:
         jobs.sort(key = lambda job: (job.time_to_deadline-job.remaining_execution_time, job.task.index))
 
 
-def visualizeSimulation(lines, t, n_task, scheduler_name):
+def visualizeSimulation(lines, releases, start, stop, n_task, scheduler_name):
     fig2, ax2 = plt.subplots(figsize=(9, 5))
-    lc = mc.LineCollection(lines, linewidths=2)
+    lc = mc.LineCollection(lines, linewidths=10)
     ax2.add_collection(lc)
     ax2.autoscale()
-    plt.xlim([-1,t+1])
-    plt.ylim([-1,n_task])
+    # Plot release arrows
+    release_arrow_length = 0.5
+    for release in releases:
+        plt.arrow(release[0], release[1] + release_arrow_length, 0, -release_arrow_length,
+            width=0.08, head_width=0.2, head_length=0.1, length_includes_head=True,
+            facecolor="black", edgecolor="none")
+    # Set up axes
+    plt.grid(linestyle='dotted')
+    plt.xlim([start - 1, stop + 1])
+    plt.ylim([-1, n_task])
     plt.ylabel("Task index")
     plt.xlabel("Time t")
-    plt.yticks([i for i in range(n_task)])
-    plt.xticks([i for i in range(lines[-1][-1][0]+2)])
+    plt.yticks(list(range(n_task)))
+    plt.xticks(list(range(start - 1, stop + 1)))
     plt.title("Simulation done by the {0}-scheduler".format(scheduler_name))
     plt.show()
