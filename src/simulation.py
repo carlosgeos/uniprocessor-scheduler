@@ -33,7 +33,6 @@ def simulate(scheduler, tasks, start, stop):
             uptime_current += 1
             if current.remaining_execution_time <= 0:
                 jobs.remove(current)
-                current = None
 
         # Decrease time to deadline of all jobs
         for job in jobs:
@@ -56,23 +55,24 @@ def simulate(scheduler, tasks, start, stop):
         scheduler.sort_jobs(jobs)
         # Take the jobs with highest priority
         scheduled = jobs[0] if len(jobs) > 0 else None
-        # If we do a preemption, increment the counter
+        # If the scheduled job is a different one
         if scheduled != current and current != None:
-            preemption_count += 1
             print(t - uptime_current, "-", t, ": ", current)
+            executions.append([(t - uptime_current, current.task.index), (t, current.task.index)])
             uptime_current = 0
+            # If we do a preemption, increment the counter
+            if current.remaining_execution_time > 0:
+                preemption_count += 1
 
         # Schedule the job
         current = scheduled
-        if current != None:
-            executions.append([(t,current.task.index),(t+1,current.task.index)])
 
         # Print the log
         for deadline_miss in deadline_misses:
             print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
         for job_arrival in job_arrivals:
             print(t, ": Arrival of job ", job_arrival, sep="")
-            
+
     print("END: {0} preemptions".format(preemption_count))
     visualizeSimulation(executions, stop, len(tasks), scheduler.name())
 
