@@ -1,7 +1,7 @@
 import argparse
 from generator import generate_tasks
 from feasibility_interval import getFeasibilityInterval
-from simulation import simulate_edf
+from simulation import simulate_edf,simulate_llf
 
 
 def no_arguments(args):
@@ -47,6 +47,7 @@ llf_parser.add_argument('start', default=0, type=int,
                         help='start time')
 llf_parser.add_argument('stop', default=20, type=int,
                         help='stop time')
+llf_parser.set_defaults(func=simulate_llf)
 interval_parser.set_defaults(func=getFeasibilityInterval)
 
 # TODO, add command line options for the rest of the sub_commands

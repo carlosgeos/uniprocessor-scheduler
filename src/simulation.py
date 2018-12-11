@@ -1,11 +1,18 @@
 from classes import Job
 from parser_ import parse_system
-
+import matplotlib.pyplot as plt
+from matplotlib import collections  as mc
 
 def simulate_edf(args):
     params = vars(args)
     tasks = parse_system(params["input_file"])
     scheduler = EdfScheduler()
+    simulate(scheduler, tasks, params["start"], params["stop"])
+
+def simulate_llf(args):
+    params = vars(args)
+    tasks = parse_system(params["input_file"])
+    scheduler = LlfScheduler()
     simulate(scheduler, tasks, params["start"], params["stop"])
 
 def simulate(scheduler, tasks, start, stop):
@@ -16,6 +23,7 @@ def simulate(scheduler, tasks, start, stop):
     # The time since the current job has been lastly started
     # It is used only for printing
     uptime_current = 0
+    executions=[]
     for t in range(start, stop):
         deadline_misses = []
         job_arrivals = []
@@ -54,15 +62,40 @@ def simulate(scheduler, tasks, start, stop):
             uptime_current = 0
         # Schedule the job
         current = scheduled
-
+        if current!=None:
+            executions.append([(t,current.task.index),(t+1,current.task.index)])
         # Print the log
         for deadline_miss in deadline_misses:
             print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
         for job_arrival in job_arrivals:
             print(t, ": Arrival of job ", job_arrival, sep="")
 
+    visualizeSimulation(executions, stop, len(tasks), scheduler.name())
+
 class EdfScheduler:
+    def name(self):
+        return "EDF"
     def sort_jobs(self, jobs):
         jobs.sort(key = lambda job: (job.time_to_deadline, job.task.index))
         
 
+class LlfScheduler:
+    def name(self):
+        return "LLF"
+    def sort_jobs(self, jobs):
+        jobs.sort(key = lambda job: (job.time_to_deadline-job.remaining_execution_time, job.task.index))
+
+
+def visualizeSimulation(lines, t, n_task, scheduler_name):
+    fig2, ax2 = plt.subplots(figsize=(9, 5))
+    lc = mc.LineCollection(lines, linewidths=2)
+    ax2.add_collection(lc)
+    ax2.autoscale()
+    plt.xlim([-1,t+1])
+    plt.ylim([-1,n_task])
+    plt.ylabel("Task index")
+    plt.xlabel("Time t")
+    plt.yticks([i for i in range(n_task)])
+    plt.xticks([i for i in range(lines[-1][-1][0]+2)])
+    plt.title("Simulation done by the {0}-scheduler".format(scheduler_name))
+    plt.show()
