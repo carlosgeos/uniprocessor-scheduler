@@ -16,6 +16,7 @@ def simulate_llf(args):
     simulate(scheduler, tasks, params["start"], params["stop"])
 
 def simulate(scheduler, tasks, start, stop):
+    print("Schedule from:", start, "to:", stop, ";", len(tasks), "tasks")
     jobs = []
     preemption_count = 0
     # The job currently scheduled
