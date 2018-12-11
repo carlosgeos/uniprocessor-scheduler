@@ -33,6 +33,7 @@ def simulate(scheduler, tasks, start, stop):
             uptime_current += 1
             if current.remaining_execution_time <= 0:
                 jobs.remove(current)
+                current = None
 
         # Decrease time to deadline of all jobs
         for job in jobs:
@@ -60,15 +61,18 @@ def simulate(scheduler, tasks, start, stop):
             preemption_count += 1
             print(t - uptime_current, "-", t, ": ", current)
             uptime_current = 0
+
         # Schedule the job
         current = scheduled
-        if current!=None:
+        if current != None:
             executions.append([(t,current.task.index),(t+1,current.task.index)])
+
         # Print the log
         for deadline_miss in deadline_misses:
             print(t, ": Job ", deadline_miss, " misses a deadline", sep="")
         for job_arrival in job_arrivals:
             print(t, ": Arrival of job ", job_arrival, sep="")
+            
     print("END: {0} preemptions".format(preemption_count))
     visualizeSimulation(executions, stop, len(tasks), scheduler.name())
 
@@ -77,7 +81,7 @@ class EdfScheduler:
         return "EDF"
     def sort_jobs(self, jobs):
         jobs.sort(key = lambda job: (job.time_to_deadline, job.task.index))
-        
+
 
 class LlfScheduler:
     def name(self):
