@@ -12,7 +12,6 @@ def parse_system(input_file):
 def save_system(tasks, output_file):
     with open(output_file, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=['offset', 'wcet', 'period'], delimiter=';')
-        writer.writeheader()
         for task in tasks:
             writer.writerow({
                 "offset": task.offset,
