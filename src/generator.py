@@ -9,7 +9,6 @@ def deviate_load(elem, coll):
     """
     pass
 
-
 def load_to_wcet_period_ratio(elem):
     """Establish an approximate ratio WCET / Period that satisfies the
     load factor of the task given as input in elem.
@@ -17,15 +16,17 @@ def load_to_wcet_period_ratio(elem):
     """
     pass
 
-
 def generate_tasks(args):
     params = vars(args)
-    load_factor = Fraction(params['load_factor'])
-    load_factor /= 100
-    print(load_factor.numerator)
-    print(load_factor.denominator)
     n_tasks = params['tasks']
-    period = lcm(load_factor.numerator, n_tasks) * load_factor.denominator
-    wcet = lcm(load_factor.numerator, n_tasks) * load_factor.numerator // n_tasks
+    load_factor = Fraction(params['load_factor'])
+    # We receive a percentage, divide by 100
+    load_factor /= 100
+    # This is the fraction of time a process uses individually
+    load_by_process = load_factor / n_tasks
+    # load_by_process is a Fraction, so its numerator and denominator are
+    # the smallest quotients we can use that divide time equally
+    wcet = load_by_process.numerator
+    period = load_by_process.denominator
     tasks = [Task(0, wcet, period, i) for i in range(n_tasks)]
     save_system(tasks, params["output_file"])
