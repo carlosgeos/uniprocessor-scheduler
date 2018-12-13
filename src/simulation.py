@@ -4,18 +4,24 @@ import matplotlib.pyplot as plt
 from matplotlib import collections  as mc
 
 def simulate_edf(args):
+    """Runs a scheduling simulation using EDF priority scheduler."""
     params = vars(args)
     tasks = parse_system(params["input_file"])
     scheduler = EdfScheduler()
     simulate(scheduler, tasks, params["start"], params["stop"])
 
 def simulate_llf(args):
+    """Runs a scheduling simulation using LLF priority scheduler."""
     params = vars(args)
     tasks = parse_system(params["input_file"])
     scheduler = LlfScheduler()
     simulate(scheduler, tasks, params["start"], params["stop"])
 
 def simulate(scheduler, tasks, start, stop):
+    """Runs a scheduling simulation with a given scheduler, a set of tasks and
+    the start and stop time. The simulation in fact will be conducted from
+    t = zero to stop, but the log will be printed only after t = start.
+    """
     print("Schedule from:", start, "to:", stop, ";", len(tasks), "tasks")
     jobs = []
     preemption_count = 0
@@ -98,6 +104,15 @@ class LlfScheduler:
 
 
 def visualizeSimulation(lines, releases, start, stop, n_task, scheduler_name):
+    """Plots the given scheduling events.
+    Params:
+        lines: The lines indicating the scheduled jobs
+        releases: The job release events
+        start: the start time
+        stop: the stop time
+        n_tasks: the number of tasks
+        scheduler_name: the name of the scheduler, used in the title of the plot.
+    """
     fig2, ax2 = plt.subplots(figsize=(9, 5))
     lc = mc.LineCollection(lines, linewidths=10)
     ax2.add_collection(lc)

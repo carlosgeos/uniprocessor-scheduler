@@ -4,20 +4,13 @@ from feasibility_interval import lcm
 from parser_ import save_system
 from random import randint
 
-def deviate_load(elem, coll):
-    """Randomize average load for each of the tasks
-
-    """
-    pass
-
-def load_to_wcet_period_ratio(elem):
-    """Establish an approximate ratio WCET / Period that satisfies the
-    load factor of the task given as input in elem.
-
-    """
-    pass
-
 def generate_tasks(args):
+    """Generates a system of tasks, given its size and the desired load factor.
+    Params in args:
+        tasks: the number of tasks
+        load_factor: the load factor of the output, in percent (can be decimal)
+        output_file: the filename where to write the output
+    """
     params = vars(args)
     n_tasks = params['tasks']
     load_factor = Fraction(params['load_factor'])
