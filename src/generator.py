@@ -22,5 +22,6 @@ def generate_tasks(args):
     # the smallest quotients we can use that divide time equally
     wcet = load_by_process.numerator
     period = load_by_process.denominator
-    tasks = [Task(randint(0, period // 2), wcet, period, i) for i in range(n_tasks)]
+    tasks = [Task(randint(0, period // 2), wcet, period, i)
+             for i in range(n_tasks)]
     save_system(tasks, params["output_file"])

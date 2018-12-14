@@ -1,7 +1,7 @@
 import argparse
 from generator import generate_tasks
 from feasibility_interval import getFeasibilityInterval
-from simulation import simulate_edf,simulate_llf
+from simulation import simulate_edf, simulate_llf
 
 
 def no_arguments(args):
@@ -13,7 +13,7 @@ def no_arguments(args):
 
 
 argparser = argparse.ArgumentParser(description='EDF and LLF scheduler')
-argparser.set_defaults(func=no_arguments) # function to call if no args
+argparser.set_defaults(func=no_arguments)  # function to call if no args
 subparsers = argparser.add_subparsers(help='sub-command help')
 
 gen_parser = subparsers.add_parser('gen')
@@ -27,14 +27,14 @@ gen_parser.add_argument('load_factor', default=70, type=str,
                         help='Utilization factor of the system')
 gen_parser.add_argument('output_file', default='tasks.txt', type=str,
                         help='Path where output file should be written')
-gen_parser.set_defaults(func=generate_tasks) # dispatcher
+gen_parser.set_defaults(func=generate_tasks)  # dispatcher
 
-interval_parser.add_argument("input_file", default="./data/system.txt", type=str,
-                            help="Path where input file is")
+interval_parser.add_argument("input_file", default="./data/system.txt",
+                             type=str, help="Path where input file is")
 interval_parser.set_defaults(func=getFeasibilityInterval)
 
 edf_parser.add_argument("input_file", default="./data/system.txt", type=str,
-                            help="Path where input file is")
+                        help="Path where input file is")
 edf_parser.add_argument('start', default=0, type=int,
                         help='start time')
 edf_parser.add_argument('stop', default=20, type=int,
@@ -42,7 +42,7 @@ edf_parser.add_argument('stop', default=20, type=int,
 edf_parser.set_defaults(func=simulate_edf)
 
 llf_parser.add_argument("input_file", default="./data/system.txt", type=str,
-                            help="Path where input file is")
+                        help="Path where input file is")
 llf_parser.add_argument('start', default=0, type=int,
                         help='start time')
 llf_parser.add_argument('stop', default=20, type=int,

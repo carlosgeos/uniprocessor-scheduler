@@ -6,6 +6,7 @@ class Task:
         self.index = index
         self.job_counter = 0
 
+
 class Job:
     def __init__(self, task):
         self.task = task
