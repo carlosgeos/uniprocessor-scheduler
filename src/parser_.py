@@ -9,10 +9,11 @@ def parse_system(input_file):
                             delimiter=';')
     return [Task(int(row['offset']), int(row['wcet']), int(row['period']), i) for i, row in enumerate(reader)]
 
+
 def save_system(tasks, output_file):
     """Saves the list of tasks to an output file."""
     with open(output_file, 'w', newline='') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=['offset', 'wcet', 'period'], delimiter=';')
+        writer = csv.DictWriter(csvfile, fieldnames=['offset', 'wcet', 'period'], delimiter='; ')
         for task in tasks:
             writer.writerow({
                 "offset": task.offset,

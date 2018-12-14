@@ -1,8 +1,4 @@
-import os
-
-from parser_ import parse_system
 from argparser import argparser
-from simulation import EdfScheduler, simulate
 
 
 def main():

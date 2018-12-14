@@ -1,7 +1,8 @@
 from classes import Job
 from parser_ import parse_system
 import matplotlib.pyplot as plt
-from matplotlib import collections  as mc
+from matplotlib import collections as mc
+
 
 def simulate_edf(args):
     """Runs a scheduling simulation using EDF priority scheduler."""
@@ -10,12 +11,14 @@ def simulate_edf(args):
     scheduler = EdfScheduler()
     simulate(scheduler, tasks, params["start"], params["stop"])
 
+
 def simulate_llf(args):
     """Runs a scheduling simulation using LLF priority scheduler."""
     params = vars(args)
     tasks = parse_system(params["input_file"])
     scheduler = LlfScheduler()
     simulate(scheduler, tasks, params["start"], params["stop"])
+
 
 def simulate(scheduler, tasks, start, stop):
     """Runs a scheduling simulation with a given scheduler, a set of tasks and
@@ -37,7 +40,7 @@ def simulate(scheduler, tasks, start, stop):
         deadline_misses = []
         job_arrivals = []
 
-        if current != None:
+        if current is not None:
             current.remaining_execution_time -= 1
             uptime_current += 1
             if current.remaining_execution_time <= 0:
@@ -50,7 +53,7 @@ def simulate(scheduler, tasks, start, stop):
                 deadline_misses.append(job)
                 # Abort the job at its deadline, according to statement
                 jobs.remove(job)
-        deadline_misses.sort(key = lambda job : job.task.index)
+        deadline_misses.sort(key=lambda job: job.task.index)
 
         # Add a new job if it's realase time for a task
         for task in tasks:
@@ -60,14 +63,14 @@ def simulate(scheduler, tasks, start, stop):
                 jobs.append(new_job)
                 if t >= start:
                     releases.append((t, new_job.task.index))
-        job_arrivals.sort(key = lambda job : job.task.index)
+        job_arrivals.sort(key=lambda job: job.task.index)
 
         # Sort the jobs by priority
         scheduler.sort_jobs(jobs)
         # Take the jobs with highest priority
         scheduled = jobs[0] if len(jobs) > 0 else None
         # If the scheduled job is a different one
-        if scheduled != current and current != None:
+        if scheduled != current and current is not None:
             if t - uptime_current >= start:
                 print(t - uptime_current, "-", t, ": ", current)
                 executions.append([(t - uptime_current, current.task.index), (t, current.task.index)])
@@ -89,18 +92,21 @@ def simulate(scheduler, tasks, start, stop):
     print("END: {0} preemptions".format(preemption_count))
     visualizeSimulation(executions, releases, start, stop, len(tasks), scheduler.name())
 
+
 class EdfScheduler:
     def name(self):
         return "EDF"
+
     def sort_jobs(self, jobs):
-        jobs.sort(key = lambda job: (job.time_to_deadline, job.task.index))
+        jobs.sort(key=lambda job: (job.time_to_deadline, job.task.index))
 
 
 class LlfScheduler:
     def name(self):
         return "LLF"
+
     def sort_jobs(self, jobs):
-        jobs.sort(key = lambda job: (job.time_to_deadline-job.remaining_execution_time, job.task.index))
+        jobs.sort(key=lambda job: (job.time_to_deadline-job.remaining_execution_time, job.task.index))
 
 
 def visualizeSimulation(lines, releases, start, stop, n_task, scheduler_name):
@@ -121,8 +127,8 @@ def visualizeSimulation(lines, releases, start, stop, n_task, scheduler_name):
     release_arrow_length = 0.5
     for release in releases:
         plt.arrow(release[0], release[1] + release_arrow_length, 0, -release_arrow_length,
-            width=0.08, head_width=0.2, head_length=0.1, length_includes_head=True,
-            facecolor="black", edgecolor="none")
+                  width=0.08, head_width=0.2, head_length=0.1, length_includes_head=True,
+                  facecolor="black", edgecolor="none")
     # Set up axes
     plt.grid(linestyle='dotted')
     plt.xlim([start - 1, stop + 1])
